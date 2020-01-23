@@ -8,6 +8,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 from collections import defaultdict
+from collections import Counter
 from nltk.corpus import stopwords
 
 # Import Data
@@ -41,7 +42,6 @@ plt.show()
 disaster_length = train[train.target==1]['text'].str.len()
 nondisaster_length = train[train.target==0]['text'].str.len()
 
-plt.figure(200)
 fig,(ax1,ax2)=plt.subplots(1,2,figsize=(10,5))
 fig.suptitle('Length of Non-Diaster Tweets vs. Length of Disaster Tweets')
 ax1.hist(nondisaster_length,color='red')
@@ -112,9 +112,44 @@ plot2.bar(a1,b1,color=colors)
 plot2.set_title('Disaster Tweets')
 plt.show()
 
-#it appears that tweets that are not target tweets (ie not related to disasters) use the word "the" frequently (why?)
 
-#analyzing common punctuation
+#analyzing common words (not stopwords)
+
+# container that stores elements as keys with their count being the value
+# starting with non-disaster related tweets
+count0 = Counter(corpus0)
+most0 = count0.most_common()
+x0=[]
+y0=[]
+for word, count in most0[:40]:
+    if (word not in stopw):
+        x0.append(word)
+        y0.append(count)
+
+#print(x0)
+#print(y0)
+
+# most common words for disaster-related tweets (1)
+count1 = Counter(corpus1)
+most1 = count1.most_common()
+x1=[]
+y1=[]
+for word,count in most1[:40]:
+    if(word not in stopw):
+        x1.append(word)
+        y1.append(count)
+
+#print(x1)
+#print(y1)
+colors1 = ['r','c','c','c','c','c','c','c','c','c','c',
+           'c']
+fig,(bar1,bar2) = plt.subplots(1,2,figsize=(15,10))
+fig.suptitle('Most Common Words (not stopwords)')
+bar1.bar(x0,y0,color=colors)
+bar1.set_title('Non-Disaster Related Tweets')
+bar2.bar(x1,y1,color=colors1)
+bar2.set_title('Disaster Related Tweets')
+plt.show()
 
 
 #2) data preprocessing part 1: removing common stopwords and creating a corpus
